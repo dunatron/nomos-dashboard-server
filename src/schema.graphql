@@ -1,0 +1,25 @@
+# import User, ROLE, StandupDetails from "./generated/prisma.graphql"
+
+type Query {
+  info: String!
+  allUsers: [User!]!
+  getUser: User!
+}
+
+type Mutation {
+  signup(email: String!, password: String!, name: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+  changeUserRole(id: ID!, role: ROLE!): User!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: ROLE!
+}

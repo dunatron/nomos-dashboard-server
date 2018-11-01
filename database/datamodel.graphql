@@ -1,0 +1,24 @@
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  password: String!
+  role: ROLE! @default(value: "ONBOARDER")
+  standupDetails: [StandupDetails!]!
+    @relation(name: "UserStandupDetails", onDelete: CASCADE)
+}
+
+type StandupDetails {
+  id: ID! @unique
+  createdAt: DateTime!
+  forUser: User @relation(name: "UserStandupDetails")
+  notes: String
+  timeTaken: Int
+}
+
+enum ROLE {
+  ONBOARDER
+  DEVELOPER
+  PROJECT_MANAGER
+  WIZARD
+}
