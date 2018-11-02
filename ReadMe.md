@@ -75,7 +75,7 @@ mutation {
 ```
 
 In reality your mutation will look more like this so you can dynamically parse in the variables
-![alt text](https://github.com/dunatron/nomos-dashboard-server/documentation/img/standupDetailsMutation.png)
+![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/standupDetailsMutation.png)
 
 ```
 mutation deleteSection($sectionId:ID!){
