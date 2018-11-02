@@ -63,8 +63,27 @@ function changeUserRole(parent, args, context, info) {
   )
 }
 
+function createStandupDetails(parent, args, context, info) {
+  return context.db.mutation.createStandupDetails(
+    {
+      data: {
+        forUser: {
+          connect: {
+            id: args.userId,
+          },
+        },
+        // ...args.standUpDetails,
+        timeTaken: args.timeTake,
+        notes: args.notes,
+      },
+    },
+    info
+  )
+}
+
 module.exports = {
   signup,
   login,
   changeUserRole,
+  createStandupDetails,
 }
