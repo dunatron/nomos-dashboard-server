@@ -4,17 +4,14 @@ type Query {
   info: String!
   allUsers: [User!]!
   getUser: User!
+  getStandupDetails: [StandupDetail!]!
 }
 
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   changeUserRole(id: ID!, role: ROLE!): User!
-  createStandupDetails(
-    userId: ID!
-    timeTaken: Int
-    notes: String
-  ): StandupDetails
+  createStandupDetail(userId: ID!, timeTaken: Int, notes: String): StandupDetail
 }
 
 type AuthPayload {

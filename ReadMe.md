@@ -84,3 +84,19 @@ mutation deleteSection($sectionId:ID!){
   }
 }
 ```
+
+To get all the stand up details
+
+```
+query {
+  getStandupDetails {
+    id
+    notes
+    timeTaken
+    createdAt
+    forUser {
+      name
+    }
+  }
+}
+```

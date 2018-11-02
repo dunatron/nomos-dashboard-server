@@ -1,7 +1,7 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/nomos-dashboard-db/dev
-# timestamp: Thu Nov 01 2018 17:03:21 GMT+1300 (NZDT)
+# timestamp: Fri Nov 02 2018 15:39:35 GMT+1300 (NZDT)
 
-type AggregateStandupDetails {
+type AggregateStandupDetail {
   count: Int!
 }
 
@@ -24,17 +24,17 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
-  createStandupDetails(data: StandupDetailsCreateInput!): StandupDetails!
+  createStandupDetail(data: StandupDetailCreateInput!): StandupDetail!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateStandupDetails(data: StandupDetailsUpdateInput!, where: StandupDetailsWhereUniqueInput!): StandupDetails
+  updateStandupDetail(data: StandupDetailUpdateInput!, where: StandupDetailWhereUniqueInput!): StandupDetail
   deleteUser(where: UserWhereUniqueInput!): User
-  deleteStandupDetails(where: StandupDetailsWhereUniqueInput!): StandupDetails
+  deleteStandupDetail(where: StandupDetailWhereUniqueInput!): StandupDetail
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertStandupDetails(where: StandupDetailsWhereUniqueInput!, create: StandupDetailsCreateInput!, update: StandupDetailsUpdateInput!): StandupDetails!
+  upsertStandupDetail(where: StandupDetailWhereUniqueInput!, create: StandupDetailCreateInput!, update: StandupDetailUpdateInput!): StandupDetail!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  updateManyStandupDetailses(data: StandupDetailsUpdateManyMutationInput!, where: StandupDetailsWhereInput): BatchPayload!
+  updateManyStandupDetails(data: StandupDetailUpdateManyMutationInput!, where: StandupDetailWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyStandupDetailses(where: StandupDetailsWhereInput): BatchPayload!
+  deleteManyStandupDetails(where: StandupDetailWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -66,11 +66,11 @@ type PageInfo {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  standupDetailses(where: StandupDetailsWhereInput, orderBy: StandupDetailsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StandupDetails]!
+  standupDetails(where: StandupDetailWhereInput, orderBy: StandupDetailOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StandupDetail]!
   user(where: UserWhereUniqueInput!): User
-  standupDetails(where: StandupDetailsWhereUniqueInput!): StandupDetails
+  standupDetail(where: StandupDetailWhereUniqueInput!): StandupDetail
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  standupDetailsesConnection(where: StandupDetailsWhereInput, orderBy: StandupDetailsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StandupDetailsConnection!
+  standupDetailsConnection(where: StandupDetailWhereInput, orderBy: StandupDetailOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StandupDetailConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -80,13 +80,16 @@ type Query {
 }
 
 enum ROLE {
+  DESIGNER
+  TESTER
+  ANALYST
   ONBOARDER
   DEVELOPER
   PROJECT_MANAGER
   WIZARD
 }
 
-type StandupDetails implements Node {
+type StandupDetail implements Node {
   id: ID!
   createdAt: DateTime!
   forUser: User
@@ -95,41 +98,41 @@ type StandupDetails implements Node {
 }
 
 """A connection to a list of items."""
-type StandupDetailsConnection {
+type StandupDetailConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [StandupDetailsEdge]!
-  aggregate: AggregateStandupDetails!
+  edges: [StandupDetailEdge]!
+  aggregate: AggregateStandupDetail!
 }
 
-input StandupDetailsCreateInput {
+input StandupDetailCreateInput {
   notes: String
   timeTaken: Int
   forUser: UserCreateOneWithoutStandupDetailsInput
 }
 
-input StandupDetailsCreateManyWithoutForUserInput {
-  create: [StandupDetailsCreateWithoutForUserInput!]
-  connect: [StandupDetailsWhereUniqueInput!]
+input StandupDetailCreateManyWithoutForUserInput {
+  create: [StandupDetailCreateWithoutForUserInput!]
+  connect: [StandupDetailWhereUniqueInput!]
 }
 
-input StandupDetailsCreateWithoutForUserInput {
+input StandupDetailCreateWithoutForUserInput {
   notes: String
   timeTaken: Int
 }
 
 """An edge in a connection."""
-type StandupDetailsEdge {
+type StandupDetailEdge {
   """The item at the end of the edge."""
-  node: StandupDetails!
+  node: StandupDetail!
 
   """A cursor for use in pagination."""
   cursor: String!
 }
 
-enum StandupDetailsOrderByInput {
+enum StandupDetailOrderByInput {
   id_ASC
   id_DESC
   createdAt_ASC
@@ -142,29 +145,29 @@ enum StandupDetailsOrderByInput {
   updatedAt_DESC
 }
 
-type StandupDetailsPreviousValues {
+type StandupDetailPreviousValues {
   id: ID!
   createdAt: DateTime!
   notes: String
   timeTaken: Int
 }
 
-type StandupDetailsSubscriptionPayload {
+type StandupDetailSubscriptionPayload {
   mutation: MutationType!
-  node: StandupDetails
+  node: StandupDetail
   updatedFields: [String!]
-  previousValues: StandupDetailsPreviousValues
+  previousValues: StandupDetailPreviousValues
 }
 
-input StandupDetailsSubscriptionWhereInput {
+input StandupDetailSubscriptionWhereInput {
   """Logical AND on all given filters."""
-  AND: [StandupDetailsSubscriptionWhereInput!]
+  AND: [StandupDetailSubscriptionWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [StandupDetailsSubscriptionWhereInput!]
+  OR: [StandupDetailSubscriptionWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [StandupDetailsSubscriptionWhereInput!]
+  NOT: [StandupDetailSubscriptionWhereInput!]
 
   """
   The subscription event gets dispatched when it's listed in mutation_in
@@ -185,54 +188,54 @@ input StandupDetailsSubscriptionWhereInput {
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
   updatedFields_contains_some: [String!]
-  node: StandupDetailsWhereInput
+  node: StandupDetailWhereInput
 }
 
-input StandupDetailsUpdateInput {
+input StandupDetailUpdateInput {
   notes: String
   timeTaken: Int
   forUser: UserUpdateOneWithoutStandupDetailsInput
 }
 
-input StandupDetailsUpdateManyMutationInput {
+input StandupDetailUpdateManyMutationInput {
   notes: String
   timeTaken: Int
 }
 
-input StandupDetailsUpdateManyWithoutForUserInput {
-  create: [StandupDetailsCreateWithoutForUserInput!]
-  connect: [StandupDetailsWhereUniqueInput!]
-  disconnect: [StandupDetailsWhereUniqueInput!]
-  delete: [StandupDetailsWhereUniqueInput!]
-  update: [StandupDetailsUpdateWithWhereUniqueWithoutForUserInput!]
-  upsert: [StandupDetailsUpsertWithWhereUniqueWithoutForUserInput!]
+input StandupDetailUpdateManyWithoutForUserInput {
+  create: [StandupDetailCreateWithoutForUserInput!]
+  connect: [StandupDetailWhereUniqueInput!]
+  disconnect: [StandupDetailWhereUniqueInput!]
+  delete: [StandupDetailWhereUniqueInput!]
+  update: [StandupDetailUpdateWithWhereUniqueWithoutForUserInput!]
+  upsert: [StandupDetailUpsertWithWhereUniqueWithoutForUserInput!]
 }
 
-input StandupDetailsUpdateWithoutForUserDataInput {
+input StandupDetailUpdateWithoutForUserDataInput {
   notes: String
   timeTaken: Int
 }
 
-input StandupDetailsUpdateWithWhereUniqueWithoutForUserInput {
-  where: StandupDetailsWhereUniqueInput!
-  data: StandupDetailsUpdateWithoutForUserDataInput!
+input StandupDetailUpdateWithWhereUniqueWithoutForUserInput {
+  where: StandupDetailWhereUniqueInput!
+  data: StandupDetailUpdateWithoutForUserDataInput!
 }
 
-input StandupDetailsUpsertWithWhereUniqueWithoutForUserInput {
-  where: StandupDetailsWhereUniqueInput!
-  update: StandupDetailsUpdateWithoutForUserDataInput!
-  create: StandupDetailsCreateWithoutForUserInput!
+input StandupDetailUpsertWithWhereUniqueWithoutForUserInput {
+  where: StandupDetailWhereUniqueInput!
+  update: StandupDetailUpdateWithoutForUserDataInput!
+  create: StandupDetailCreateWithoutForUserInput!
 }
 
-input StandupDetailsWhereInput {
+input StandupDetailWhereInput {
   """Logical AND on all given filters."""
-  AND: [StandupDetailsWhereInput!]
+  AND: [StandupDetailWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [StandupDetailsWhereInput!]
+  OR: [StandupDetailWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [StandupDetailsWhereInput!]
+  NOT: [StandupDetailWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -360,13 +363,13 @@ input StandupDetailsWhereInput {
   forUser: UserWhereInput
 }
 
-input StandupDetailsWhereUniqueInput {
+input StandupDetailWhereUniqueInput {
   id: ID
 }
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  standupDetails(where: StandupDetailsSubscriptionWhereInput): StandupDetailsSubscriptionPayload
+  standupDetail(where: StandupDetailSubscriptionWhereInput): StandupDetailSubscriptionPayload
 }
 
 type User implements Node {
@@ -375,7 +378,7 @@ type User implements Node {
   email: String!
   password: String!
   role: ROLE!
-  standupDetails(where: StandupDetailsWhereInput, orderBy: StandupDetailsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StandupDetails!]
+  standupDetails(where: StandupDetailWhereInput, orderBy: StandupDetailOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StandupDetail!]
 }
 
 """A connection to a list of items."""
@@ -393,7 +396,7 @@ input UserCreateInput {
   email: String!
   password: String!
   role: ROLE
-  standupDetails: StandupDetailsCreateManyWithoutForUserInput
+  standupDetails: StandupDetailCreateManyWithoutForUserInput
 }
 
 input UserCreateOneWithoutStandupDetailsInput {
@@ -486,7 +489,7 @@ input UserUpdateInput {
   email: String
   password: String
   role: ROLE
-  standupDetails: StandupDetailsUpdateManyWithoutForUserInput
+  standupDetails: StandupDetailUpdateManyWithoutForUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -696,9 +699,9 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [ROLE!]
-  standupDetails_every: StandupDetailsWhereInput
-  standupDetails_some: StandupDetailsWhereInput
-  standupDetails_none: StandupDetailsWhereInput
+  standupDetails_every: StandupDetailWhereInput
+  standupDetails_some: StandupDetailWhereInput
+  standupDetails_none: StandupDetailWhereInput
 }
 
 input UserWhereUniqueInput {
