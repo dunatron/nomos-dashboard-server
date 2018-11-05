@@ -1,5 +1,9 @@
 ## Mutations
 
+##Tutorials
+
+- https://medium.com/@sternwebagency/lets-write-a-chat-with-graphql-and-react-b4216293baff
+
 - the below mutation will create new stand up details for a user. Now this is stepping through the api that was scaffolded by prisma. These mutations and queries will not be queryable by the client API we expose. instead you need to create something based on this api I would imagine.
 
 ```
@@ -95,6 +99,73 @@ query {
     timeTaken
     createdAt
     forUser {
+      name
+    }
+  }
+}
+```
+
+The following query is an example on how to create a db mutation for creating leave
+
+![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/db_leave_mutation_example.png)
+
+```
+mutation createLeave(
+  $lastDayOfWork: DateTime!
+  $firstDayOfLeave: DateTime!
+  $lastDayOfLeave: DateTime!
+  $firstDayOfWork: DateTime!
+  $daysOfLeave: Int!
+  $publicHolidays: Int!
+  $totalLeaveDays: Int!
+  $type:LEAVE_TYPE
+){
+  createLeave( data:{
+    lastDayOfWork: $lastDayOfWork
+    firstDayOfLeave:$firstDayOfLeave
+    lastDayOfLeave: $lastDayOfLeave
+    firstDayOfWork: $firstDayOfWork
+    daysOfLeave: $daysOfLeave
+    publicHolidays: $publicHolidays
+    totalLeaveDays: $totalLeaveDays
+    type: $type
+    forUser: {connect: {id: "cjnxy25r6e8du0995uhu2mx7w"}}
+  }) {
+    id
+    totalLeaveDays
+  }
+}
+```
+
+Query variables for above query
+
+```
+{
+  "lastDayOfWork": "2015-03-25T12:00:00-06:30",
+  "firstDayOfLeave":"2015-03-25T12:00:00-06:30",
+  "lastDayOfLeave":"2015-03-25T12:00:00-06:30",
+  "firstDayOfWork":"2015-03-25T12:00:00-06:30",
+  "daysOfLeave":1,
+	"publicHolidays":1,
+  "totalLeaveDays":2,
+  "type": "ANNUAL_LEAVE"
+}
+```
+
+Get all of the Leave in the system
+
+```
+query {
+  getAllLeave {
+    lastDayOfWork
+    firstDayOfLeave
+    lastDayOfLeave
+    firstDayOfWork
+    daysOfLeave
+    publicHolidays
+    totalLeaveDays
+    forUser {
+      id
       name
     }
   }

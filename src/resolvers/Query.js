@@ -1,5 +1,9 @@
 const { APP_SECRET, getUserId } = require("../utils")
 
+function getAllLeave(root, args, context, info) {
+  return context.db.query.leaves({}, info)
+}
+
 function getStandupDetails(root, args, context, info) {
   return context.db.query.standupDetails({}, info)
 }
@@ -20,6 +24,7 @@ function info(root, args, context, info) {
 }
 
 module.exports = {
+  getAllLeave,
   getStandupDetails,
   getUser,
   allUsers,

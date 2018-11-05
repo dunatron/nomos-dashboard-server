@@ -6,6 +6,9 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "graphql-yoga": "^1.16.7",
-    "prisma-binding": "^2.1.6"
+    "moment": "^2.22.2",
+    "nodemailer": "^4.6.8",
+    "prisma-binding": "^2.1.6",
+    "table-builder": "^2.1.1"
   }
 }

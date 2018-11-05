@@ -1,10 +1,11 @@
-# import User, ROLE, StandupDetails from "./generated/prisma.graphql"
+# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE from "./generated/prisma.graphql"
 
 type Query {
   info: String!
   allUsers: [User!]!
   getUser: User!
   getStandupDetails: [StandupDetail!]!
+  getAllLeave: [Leave!]!
 }
 
 type Mutation {
@@ -12,6 +13,16 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
   changeUserRole(id: ID!, role: ROLE!): User!
   createStandupDetail(userId: ID!, timeTaken: Int, notes: String): StandupDetail
+  createLeave(
+    userId: ID!
+    lastDayOfWork: DateTime!
+    firstDayOfLeave: DateTime!
+    lastDayOfLeave: DateTime!
+    firstDayOfWork: DateTime!
+    daysOfLeave: Int!
+    publicHolidays: Int!
+    type: LEAVE_TYPE
+  ): Leave
 }
 
 type AuthPayload {

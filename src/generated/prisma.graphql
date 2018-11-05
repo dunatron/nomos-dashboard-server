@@ -1,5 +1,9 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/nomos-dashboard-db/dev
-# timestamp: Fri Nov 02 2018 15:39:35 GMT+1300 (NZDT)
+# timestamp: Mon Nov 05 2018 09:52:29 GMT+1300 (NZDT)
+
+type AggregateLeave {
+  count: Int!
+}
 
 type AggregateStandupDetail {
   count: Int!
@@ -16,6 +20,432 @@ type BatchPayload {
 
 scalar DateTime
 
+type Leave implements Node {
+  id: ID!
+  forUser: User
+  lastDayOfWork: DateTime!
+  firstDayOfLeave: DateTime!
+  lastDayOfLeave: DateTime!
+  firstDayOfWork: DateTime!
+  daysOfLeave: Int!
+  publicHolidays: Int!
+  totalLeaveDays: Int!
+  type: LEAVE_TYPE!
+}
+
+enum LEAVE_TYPE {
+  ANNUAL_LEAVE
+  BEREAVEMENT_LEAVE
+  PARENTAL_LEAVE
+  PAID_PARENTAL_LEAVE
+  SICK_LEAVE
+  DOMESTIC_LEAVE
+  SPECIAL_LEAVE
+  LONG_SERVICE_LEAVE
+  JURY_SERVICE
+  ACCIDENT_COMPENSATION
+  EMPLOYMENT_RELATIONS_EDUCATION
+  CIVIL_DEFENCE_EMERGENCY
+  MILITARY_SERVICE
+}
+
+"""A connection to a list of items."""
+type LeaveConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [LeaveEdge]!
+  aggregate: AggregateLeave!
+}
+
+input LeaveCreateInput {
+  lastDayOfWork: DateTime!
+  firstDayOfLeave: DateTime!
+  lastDayOfLeave: DateTime!
+  firstDayOfWork: DateTime!
+  daysOfLeave: Int!
+  publicHolidays: Int!
+  totalLeaveDays: Int!
+  type: LEAVE_TYPE
+  forUser: UserCreateOneWithoutAppliedLeaveInput
+}
+
+input LeaveCreateManyWithoutForUserInput {
+  create: [LeaveCreateWithoutForUserInput!]
+  connect: [LeaveWhereUniqueInput!]
+}
+
+input LeaveCreateWithoutForUserInput {
+  lastDayOfWork: DateTime!
+  firstDayOfLeave: DateTime!
+  lastDayOfLeave: DateTime!
+  firstDayOfWork: DateTime!
+  daysOfLeave: Int!
+  publicHolidays: Int!
+  totalLeaveDays: Int!
+  type: LEAVE_TYPE
+}
+
+"""An edge in a connection."""
+type LeaveEdge {
+  """The item at the end of the edge."""
+  node: Leave!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum LeaveOrderByInput {
+  id_ASC
+  id_DESC
+  lastDayOfWork_ASC
+  lastDayOfWork_DESC
+  firstDayOfLeave_ASC
+  firstDayOfLeave_DESC
+  lastDayOfLeave_ASC
+  lastDayOfLeave_DESC
+  firstDayOfWork_ASC
+  firstDayOfWork_DESC
+  daysOfLeave_ASC
+  daysOfLeave_DESC
+  publicHolidays_ASC
+  publicHolidays_DESC
+  totalLeaveDays_ASC
+  totalLeaveDays_DESC
+  type_ASC
+  type_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type LeavePreviousValues {
+  id: ID!
+  lastDayOfWork: DateTime!
+  firstDayOfLeave: DateTime!
+  lastDayOfLeave: DateTime!
+  firstDayOfWork: DateTime!
+  daysOfLeave: Int!
+  publicHolidays: Int!
+  totalLeaveDays: Int!
+  type: LEAVE_TYPE!
+}
+
+type LeaveSubscriptionPayload {
+  mutation: MutationType!
+  node: Leave
+  updatedFields: [String!]
+  previousValues: LeavePreviousValues
+}
+
+input LeaveSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LeaveSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LeaveSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LeaveSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: LeaveWhereInput
+}
+
+input LeaveUpdateInput {
+  lastDayOfWork: DateTime
+  firstDayOfLeave: DateTime
+  lastDayOfLeave: DateTime
+  firstDayOfWork: DateTime
+  daysOfLeave: Int
+  publicHolidays: Int
+  totalLeaveDays: Int
+  type: LEAVE_TYPE
+  forUser: UserUpdateOneWithoutAppliedLeaveInput
+}
+
+input LeaveUpdateManyMutationInput {
+  lastDayOfWork: DateTime
+  firstDayOfLeave: DateTime
+  lastDayOfLeave: DateTime
+  firstDayOfWork: DateTime
+  daysOfLeave: Int
+  publicHolidays: Int
+  totalLeaveDays: Int
+  type: LEAVE_TYPE
+}
+
+input LeaveUpdateManyWithoutForUserInput {
+  create: [LeaveCreateWithoutForUserInput!]
+  connect: [LeaveWhereUniqueInput!]
+  disconnect: [LeaveWhereUniqueInput!]
+  delete: [LeaveWhereUniqueInput!]
+  update: [LeaveUpdateWithWhereUniqueWithoutForUserInput!]
+  upsert: [LeaveUpsertWithWhereUniqueWithoutForUserInput!]
+}
+
+input LeaveUpdateWithoutForUserDataInput {
+  lastDayOfWork: DateTime
+  firstDayOfLeave: DateTime
+  lastDayOfLeave: DateTime
+  firstDayOfWork: DateTime
+  daysOfLeave: Int
+  publicHolidays: Int
+  totalLeaveDays: Int
+  type: LEAVE_TYPE
+}
+
+input LeaveUpdateWithWhereUniqueWithoutForUserInput {
+  where: LeaveWhereUniqueInput!
+  data: LeaveUpdateWithoutForUserDataInput!
+}
+
+input LeaveUpsertWithWhereUniqueWithoutForUserInput {
+  where: LeaveWhereUniqueInput!
+  update: LeaveUpdateWithoutForUserDataInput!
+  create: LeaveCreateWithoutForUserInput!
+}
+
+input LeaveWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LeaveWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LeaveWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LeaveWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  lastDayOfWork: DateTime
+
+  """All values that are not equal to given value."""
+  lastDayOfWork_not: DateTime
+
+  """All values that are contained in given list."""
+  lastDayOfWork_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastDayOfWork_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastDayOfWork_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastDayOfWork_lte: DateTime
+
+  """All values greater than the given value."""
+  lastDayOfWork_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastDayOfWork_gte: DateTime
+  firstDayOfLeave: DateTime
+
+  """All values that are not equal to given value."""
+  firstDayOfLeave_not: DateTime
+
+  """All values that are contained in given list."""
+  firstDayOfLeave_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  firstDayOfLeave_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  firstDayOfLeave_lt: DateTime
+
+  """All values less than or equal the given value."""
+  firstDayOfLeave_lte: DateTime
+
+  """All values greater than the given value."""
+  firstDayOfLeave_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  firstDayOfLeave_gte: DateTime
+  lastDayOfLeave: DateTime
+
+  """All values that are not equal to given value."""
+  lastDayOfLeave_not: DateTime
+
+  """All values that are contained in given list."""
+  lastDayOfLeave_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastDayOfLeave_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastDayOfLeave_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastDayOfLeave_lte: DateTime
+
+  """All values greater than the given value."""
+  lastDayOfLeave_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastDayOfLeave_gte: DateTime
+  firstDayOfWork: DateTime
+
+  """All values that are not equal to given value."""
+  firstDayOfWork_not: DateTime
+
+  """All values that are contained in given list."""
+  firstDayOfWork_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  firstDayOfWork_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  firstDayOfWork_lt: DateTime
+
+  """All values less than or equal the given value."""
+  firstDayOfWork_lte: DateTime
+
+  """All values greater than the given value."""
+  firstDayOfWork_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  firstDayOfWork_gte: DateTime
+  daysOfLeave: Int
+
+  """All values that are not equal to given value."""
+  daysOfLeave_not: Int
+
+  """All values that are contained in given list."""
+  daysOfLeave_in: [Int!]
+
+  """All values that are not contained in given list."""
+  daysOfLeave_not_in: [Int!]
+
+  """All values less than the given value."""
+  daysOfLeave_lt: Int
+
+  """All values less than or equal the given value."""
+  daysOfLeave_lte: Int
+
+  """All values greater than the given value."""
+  daysOfLeave_gt: Int
+
+  """All values greater than or equal the given value."""
+  daysOfLeave_gte: Int
+  publicHolidays: Int
+
+  """All values that are not equal to given value."""
+  publicHolidays_not: Int
+
+  """All values that are contained in given list."""
+  publicHolidays_in: [Int!]
+
+  """All values that are not contained in given list."""
+  publicHolidays_not_in: [Int!]
+
+  """All values less than the given value."""
+  publicHolidays_lt: Int
+
+  """All values less than or equal the given value."""
+  publicHolidays_lte: Int
+
+  """All values greater than the given value."""
+  publicHolidays_gt: Int
+
+  """All values greater than or equal the given value."""
+  publicHolidays_gte: Int
+  totalLeaveDays: Int
+
+  """All values that are not equal to given value."""
+  totalLeaveDays_not: Int
+
+  """All values that are contained in given list."""
+  totalLeaveDays_in: [Int!]
+
+  """All values that are not contained in given list."""
+  totalLeaveDays_not_in: [Int!]
+
+  """All values less than the given value."""
+  totalLeaveDays_lt: Int
+
+  """All values less than or equal the given value."""
+  totalLeaveDays_lte: Int
+
+  """All values greater than the given value."""
+  totalLeaveDays_gt: Int
+
+  """All values greater than or equal the given value."""
+  totalLeaveDays_gte: Int
+  type: LEAVE_TYPE
+
+  """All values that are not equal to given value."""
+  type_not: LEAVE_TYPE
+
+  """All values that are contained in given list."""
+  type_in: [LEAVE_TYPE!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [LEAVE_TYPE!]
+  forUser: UserWhereInput
+}
+
+input LeaveWhereUniqueInput {
+  id: ID
+}
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -25,16 +455,22 @@ scalar Long
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createStandupDetail(data: StandupDetailCreateInput!): StandupDetail!
+  createLeave(data: LeaveCreateInput!): Leave!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateStandupDetail(data: StandupDetailUpdateInput!, where: StandupDetailWhereUniqueInput!): StandupDetail
+  updateLeave(data: LeaveUpdateInput!, where: LeaveWhereUniqueInput!): Leave
   deleteUser(where: UserWhereUniqueInput!): User
   deleteStandupDetail(where: StandupDetailWhereUniqueInput!): StandupDetail
+  deleteLeave(where: LeaveWhereUniqueInput!): Leave
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertStandupDetail(where: StandupDetailWhereUniqueInput!, create: StandupDetailCreateInput!, update: StandupDetailUpdateInput!): StandupDetail!
+  upsertLeave(where: LeaveWhereUniqueInput!, create: LeaveCreateInput!, update: LeaveUpdateInput!): Leave!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyStandupDetails(data: StandupDetailUpdateManyMutationInput!, where: StandupDetailWhereInput): BatchPayload!
+  updateManyLeaves(data: LeaveUpdateManyMutationInput!, where: LeaveWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyStandupDetails(where: StandupDetailWhereInput): BatchPayload!
+  deleteManyLeaves(where: LeaveWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -67,10 +503,13 @@ type PageInfo {
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   standupDetails(where: StandupDetailWhereInput, orderBy: StandupDetailOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StandupDetail]!
+  leaves(where: LeaveWhereInput, orderBy: LeaveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Leave]!
   user(where: UserWhereUniqueInput!): User
   standupDetail(where: StandupDetailWhereUniqueInput!): StandupDetail
+  leave(where: LeaveWhereUniqueInput!): Leave
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   standupDetailsConnection(where: StandupDetailWhereInput, orderBy: StandupDetailOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StandupDetailConnection!
+  leavesConnection(where: LeaveWhereInput, orderBy: LeaveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LeaveConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -370,6 +809,7 @@ input StandupDetailWhereUniqueInput {
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   standupDetail(where: StandupDetailSubscriptionWhereInput): StandupDetailSubscriptionPayload
+  leave(where: LeaveSubscriptionWhereInput): LeaveSubscriptionPayload
 }
 
 type User implements Node {
@@ -379,6 +819,10 @@ type User implements Node {
   password: String!
   role: ROLE!
   standupDetails(where: StandupDetailWhereInput, orderBy: StandupDetailOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StandupDetail!]
+  jiraLink: String
+  phone: String
+  address: String
+  appliedLeave(where: LeaveWhereInput, orderBy: LeaveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Leave!]
 }
 
 """A connection to a list of items."""
@@ -396,7 +840,16 @@ input UserCreateInput {
   email: String!
   password: String!
   role: ROLE
+  jiraLink: String
+  phone: String
+  address: String
   standupDetails: StandupDetailCreateManyWithoutForUserInput
+  appliedLeave: LeaveCreateManyWithoutForUserInput
+}
+
+input UserCreateOneWithoutAppliedLeaveInput {
+  create: UserCreateWithoutAppliedLeaveInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutStandupDetailsInput {
@@ -404,11 +857,26 @@ input UserCreateOneWithoutStandupDetailsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutAppliedLeaveInput {
+  name: String!
+  email: String!
+  password: String!
+  role: ROLE
+  jiraLink: String
+  phone: String
+  address: String
+  standupDetails: StandupDetailCreateManyWithoutForUserInput
+}
+
 input UserCreateWithoutStandupDetailsInput {
   name: String!
   email: String!
   password: String!
   role: ROLE
+  jiraLink: String
+  phone: String
+  address: String
+  appliedLeave: LeaveCreateManyWithoutForUserInput
 }
 
 """An edge in a connection."""
@@ -431,6 +899,12 @@ enum UserOrderByInput {
   password_DESC
   role_ASC
   role_DESC
+  jiraLink_ASC
+  jiraLink_DESC
+  phone_ASC
+  phone_DESC
+  address_ASC
+  address_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -443,6 +917,9 @@ type UserPreviousValues {
   email: String!
   password: String!
   role: ROLE!
+  jiraLink: String
+  phone: String
+  address: String
 }
 
 type UserSubscriptionPayload {
@@ -489,7 +966,11 @@ input UserUpdateInput {
   email: String
   password: String
   role: ROLE
+  jiraLink: String
+  phone: String
+  address: String
   standupDetails: StandupDetailUpdateManyWithoutForUserInput
+  appliedLeave: LeaveUpdateManyWithoutForUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -497,6 +978,18 @@ input UserUpdateManyMutationInput {
   email: String
   password: String
   role: ROLE
+  jiraLink: String
+  phone: String
+  address: String
+}
+
+input UserUpdateOneWithoutAppliedLeaveInput {
+  create: UserCreateWithoutAppliedLeaveInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutAppliedLeaveDataInput
+  upsert: UserUpsertWithoutAppliedLeaveInput
 }
 
 input UserUpdateOneWithoutStandupDetailsInput {
@@ -508,11 +1001,31 @@ input UserUpdateOneWithoutStandupDetailsInput {
   upsert: UserUpsertWithoutStandupDetailsInput
 }
 
+input UserUpdateWithoutAppliedLeaveDataInput {
+  name: String
+  email: String
+  password: String
+  role: ROLE
+  jiraLink: String
+  phone: String
+  address: String
+  standupDetails: StandupDetailUpdateManyWithoutForUserInput
+}
+
 input UserUpdateWithoutStandupDetailsDataInput {
   name: String
   email: String
   password: String
   role: ROLE
+  jiraLink: String
+  phone: String
+  address: String
+  appliedLeave: LeaveUpdateManyWithoutForUserInput
+}
+
+input UserUpsertWithoutAppliedLeaveInput {
+  update: UserUpdateWithoutAppliedLeaveDataInput!
+  create: UserCreateWithoutAppliedLeaveInput!
 }
 
 input UserUpsertWithoutStandupDetailsInput {
@@ -699,9 +1212,132 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [ROLE!]
+  jiraLink: String
+
+  """All values that are not equal to given value."""
+  jiraLink_not: String
+
+  """All values that are contained in given list."""
+  jiraLink_in: [String!]
+
+  """All values that are not contained in given list."""
+  jiraLink_not_in: [String!]
+
+  """All values less than the given value."""
+  jiraLink_lt: String
+
+  """All values less than or equal the given value."""
+  jiraLink_lte: String
+
+  """All values greater than the given value."""
+  jiraLink_gt: String
+
+  """All values greater than or equal the given value."""
+  jiraLink_gte: String
+
+  """All values containing the given string."""
+  jiraLink_contains: String
+
+  """All values not containing the given string."""
+  jiraLink_not_contains: String
+
+  """All values starting with the given string."""
+  jiraLink_starts_with: String
+
+  """All values not starting with the given string."""
+  jiraLink_not_starts_with: String
+
+  """All values ending with the given string."""
+  jiraLink_ends_with: String
+
+  """All values not ending with the given string."""
+  jiraLink_not_ends_with: String
+  phone: String
+
+  """All values that are not equal to given value."""
+  phone_not: String
+
+  """All values that are contained in given list."""
+  phone_in: [String!]
+
+  """All values that are not contained in given list."""
+  phone_not_in: [String!]
+
+  """All values less than the given value."""
+  phone_lt: String
+
+  """All values less than or equal the given value."""
+  phone_lte: String
+
+  """All values greater than the given value."""
+  phone_gt: String
+
+  """All values greater than or equal the given value."""
+  phone_gte: String
+
+  """All values containing the given string."""
+  phone_contains: String
+
+  """All values not containing the given string."""
+  phone_not_contains: String
+
+  """All values starting with the given string."""
+  phone_starts_with: String
+
+  """All values not starting with the given string."""
+  phone_not_starts_with: String
+
+  """All values ending with the given string."""
+  phone_ends_with: String
+
+  """All values not ending with the given string."""
+  phone_not_ends_with: String
+  address: String
+
+  """All values that are not equal to given value."""
+  address_not: String
+
+  """All values that are contained in given list."""
+  address_in: [String!]
+
+  """All values that are not contained in given list."""
+  address_not_in: [String!]
+
+  """All values less than the given value."""
+  address_lt: String
+
+  """All values less than or equal the given value."""
+  address_lte: String
+
+  """All values greater than the given value."""
+  address_gt: String
+
+  """All values greater than or equal the given value."""
+  address_gte: String
+
+  """All values containing the given string."""
+  address_contains: String
+
+  """All values not containing the given string."""
+  address_not_contains: String
+
+  """All values starting with the given string."""
+  address_starts_with: String
+
+  """All values not starting with the given string."""
+  address_not_starts_with: String
+
+  """All values ending with the given string."""
+  address_ends_with: String
+
+  """All values not ending with the given string."""
+  address_not_ends_with: String
   standupDetails_every: StandupDetailWhereInput
   standupDetails_some: StandupDetailWhereInput
   standupDetails_none: StandupDetailWhereInput
+  appliedLeave_every: LeaveWhereInput
+  appliedLeave_some: LeaveWhereInput
+  appliedLeave_none: LeaveWhereInput
 }
 
 input UserWhereUniqueInput {

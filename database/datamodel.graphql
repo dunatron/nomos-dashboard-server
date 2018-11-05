@@ -6,14 +6,10 @@ type User {
   role: ROLE! @default(value: "ONBOARDER")
   standupDetails: [StandupDetail!]!
     @relation(name: "UserStandupDetails", onDelete: CASCADE)
-}
-
-type StandupDetail {
-  id: ID! @unique
-  createdAt: DateTime!
-  forUser: User @relation(name: "UserStandupDetails")
-  notes: String
-  timeTaken: Int
+  jiraLink: String
+  phone: String
+  address: String
+  appliedLeave: [Leave!]! @relation(name: "UserLeaveDetails", onDelete: CASCADE)
 }
 
 enum ROLE {
@@ -24,4 +20,41 @@ enum ROLE {
   DEVELOPER
   PROJECT_MANAGER
   WIZARD
+}
+
+type StandupDetail {
+  id: ID! @unique
+  createdAt: DateTime!
+  forUser: User @relation(name: "UserStandupDetails")
+  notes: String
+  timeTaken: Int
+}
+
+type Leave {
+  id: ID! @unique
+  forUser: User @relation(name: "UserLeaveDetails")
+  lastDayOfWork: DateTime!
+  firstDayOfLeave: DateTime!
+  lastDayOfLeave: DateTime!
+  firstDayOfWork: DateTime!
+  daysOfLeave: Int!
+  publicHolidays: Int!
+  totalLeaveDays: Int!
+  type: LEAVE_TYPE! @default(value: "SICK_LEAVE")
+}
+
+enum LEAVE_TYPE {
+  ANNUAL_LEAVE
+  BEREAVEMENT_LEAVE
+  PARENTAL_LEAVE
+  PAID_PARENTAL_LEAVE
+  SICK_LEAVE
+  DOMESTIC_LEAVE
+  SPECIAL_LEAVE
+  LONG_SERVICE_LEAVE
+  JURY_SERVICE
+  ACCIDENT_COMPENSATION
+  EMPLOYMENT_RELATIONS_EDUCATION
+  CIVIL_DEFENCE_EMERGENCY
+  MILITARY_SERVICE
 }
