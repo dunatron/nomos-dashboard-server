@@ -1,4 +1,4 @@
-# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE from "./generated/prisma.graphql"
+# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveOrderByInput from "./generated/prisma.graphql"
 
 type Query {
   info: String!
@@ -6,6 +6,24 @@ type Query {
   getUser: User!
   getStandupDetails: [StandupDetail!]!
   getAllLeave: [Leave!]!
+  # leaveFeed(
+  #   filter: String
+  #   skip: Int
+  #   first: Int
+  #   orderBy: LeaveOrderByInput
+  # ): [LeaveFeed!]!
+  # leaveFeed(
+  #   filter: String
+  #   skip: Int
+  #   first: Int
+  #   orderBy: LeaveOrderByInput
+  # ): [Leave!]!
+  leaveFeed(
+    filter: String
+    skip: Int
+    first: Int
+    orderBy: LeaveOrderByInput
+  ): LeaveFeed!
 }
 
 type Mutation {
@@ -26,6 +44,11 @@ type Mutation {
   ): Leave
 }
 
+type LeaveFeed {
+  leaves: [Leave!]!
+  count: Int!
+}
+
 type AuthPayload {
   token: String
   user: User
@@ -36,4 +59,8 @@ type User {
   name: String!
   email: String!
   role: ROLE!
+}
+
+type Subscription {
+  newLeave: LeaveSubscriptionPayload
 }
