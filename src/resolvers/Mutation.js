@@ -65,6 +65,18 @@ function changeUserRole(parent, args, context, info) {
   )
 }
 
+function acceptLeave(parent, args, context, info) {
+  return context.db.mutation.updateLeave(
+    {
+      data: {
+        status: "ACCEPTED",
+      },
+      where: { id: args.id },
+    },
+    info
+  )
+}
+
 // function createStandupDetail(parent, args, context, info) {
 //   return context.db.mutation.createStandupDetail(
 //     {
@@ -121,6 +133,7 @@ function changeUserRole(parent, args, context, info) {
 // }
 
 module.exports = {
+  acceptLeave,
   signup,
   login,
   changeUserRole,

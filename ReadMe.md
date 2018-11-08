@@ -171,3 +171,41 @@ query {
   }
 }
 ```
+
+Change user role in the DB
+
+```
+mutation acceptLeave($id:ID!) {
+  updateLeave(where:{id:$id} data:{status:ACCEPTED}) {
+    id
+    status
+  }
+}
+```
+
+CLient Query
+
+```
+mutation acceptLeave($id:ID!) {
+  acceptLeave(id:$id) {
+    id
+    status
+  }
+}
+```
+
+function created on the craphql server to handle the above client query
+
+```
+function acceptLeave(parent, args, context, info) {
+  return context.db.mutation.updateLeave(
+    {
+      data: {
+        status: "ACCEPTED",
+      },
+      where: { id: args.id },
+    },
+    info
+  )
+}
+```

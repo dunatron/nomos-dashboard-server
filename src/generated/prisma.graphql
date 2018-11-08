@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/nomos-dashboard-db/dev
-# timestamp: Mon Nov 05 2018 09:52:29 GMT+1300 (NZDT)
+# timestamp: Thu Nov 08 2018 15:12:57 GMT+1300 (NZDT)
 
 type AggregateLeave {
   count: Int!
@@ -22,7 +22,9 @@ scalar DateTime
 
 type Leave implements Node {
   id: ID!
+  status: LEAVE_STATUS!
   forUser: User
+  createdAt: DateTime!
   lastDayOfWork: DateTime!
   firstDayOfLeave: DateTime!
   lastDayOfLeave: DateTime!
@@ -31,6 +33,13 @@ type Leave implements Node {
   publicHolidays: Int!
   totalLeaveDays: Int!
   type: LEAVE_TYPE!
+  notes: String
+}
+
+enum LEAVE_STATUS {
+  ACCEPTED
+  PENDING
+  DENIED
 }
 
 enum LEAVE_TYPE {
@@ -60,6 +69,7 @@ type LeaveConnection {
 }
 
 input LeaveCreateInput {
+  status: LEAVE_STATUS
   lastDayOfWork: DateTime!
   firstDayOfLeave: DateTime!
   lastDayOfLeave: DateTime!
@@ -68,6 +78,7 @@ input LeaveCreateInput {
   publicHolidays: Int!
   totalLeaveDays: Int!
   type: LEAVE_TYPE
+  notes: String
   forUser: UserCreateOneWithoutAppliedLeaveInput
 }
 
@@ -77,6 +88,7 @@ input LeaveCreateManyWithoutForUserInput {
 }
 
 input LeaveCreateWithoutForUserInput {
+  status: LEAVE_STATUS
   lastDayOfWork: DateTime!
   firstDayOfLeave: DateTime!
   lastDayOfLeave: DateTime!
@@ -85,6 +97,7 @@ input LeaveCreateWithoutForUserInput {
   publicHolidays: Int!
   totalLeaveDays: Int!
   type: LEAVE_TYPE
+  notes: String
 }
 
 """An edge in a connection."""
@@ -99,6 +112,10 @@ type LeaveEdge {
 enum LeaveOrderByInput {
   id_ASC
   id_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
   lastDayOfWork_ASC
   lastDayOfWork_DESC
   firstDayOfLeave_ASC
@@ -115,14 +132,16 @@ enum LeaveOrderByInput {
   totalLeaveDays_DESC
   type_ASC
   type_DESC
+  notes_ASC
+  notes_DESC
   updatedAt_ASC
   updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type LeavePreviousValues {
   id: ID!
+  status: LEAVE_STATUS!
+  createdAt: DateTime!
   lastDayOfWork: DateTime!
   firstDayOfLeave: DateTime!
   lastDayOfLeave: DateTime!
@@ -131,110 +150,18 @@ type LeavePreviousValues {
   publicHolidays: Int!
   totalLeaveDays: Int!
   type: LEAVE_TYPE!
+  notes: String
 }
 
-type LeaveSubscriptionPayload {
-  mutation: MutationType!
-  node: Leave
-  updatedFields: [String!]
-  previousValues: LeavePreviousValues
-}
-
-input LeaveSubscriptionWhereInput {
+input LeaveScalarWhereInput {
   """Logical AND on all given filters."""
-  AND: [LeaveSubscriptionWhereInput!]
+  AND: [LeaveScalarWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [LeaveSubscriptionWhereInput!]
+  OR: [LeaveScalarWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [LeaveSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: LeaveWhereInput
-}
-
-input LeaveUpdateInput {
-  lastDayOfWork: DateTime
-  firstDayOfLeave: DateTime
-  lastDayOfLeave: DateTime
-  firstDayOfWork: DateTime
-  daysOfLeave: Int
-  publicHolidays: Int
-  totalLeaveDays: Int
-  type: LEAVE_TYPE
-  forUser: UserUpdateOneWithoutAppliedLeaveInput
-}
-
-input LeaveUpdateManyMutationInput {
-  lastDayOfWork: DateTime
-  firstDayOfLeave: DateTime
-  lastDayOfLeave: DateTime
-  firstDayOfWork: DateTime
-  daysOfLeave: Int
-  publicHolidays: Int
-  totalLeaveDays: Int
-  type: LEAVE_TYPE
-}
-
-input LeaveUpdateManyWithoutForUserInput {
-  create: [LeaveCreateWithoutForUserInput!]
-  connect: [LeaveWhereUniqueInput!]
-  disconnect: [LeaveWhereUniqueInput!]
-  delete: [LeaveWhereUniqueInput!]
-  update: [LeaveUpdateWithWhereUniqueWithoutForUserInput!]
-  upsert: [LeaveUpsertWithWhereUniqueWithoutForUserInput!]
-}
-
-input LeaveUpdateWithoutForUserDataInput {
-  lastDayOfWork: DateTime
-  firstDayOfLeave: DateTime
-  lastDayOfLeave: DateTime
-  firstDayOfWork: DateTime
-  daysOfLeave: Int
-  publicHolidays: Int
-  totalLeaveDays: Int
-  type: LEAVE_TYPE
-}
-
-input LeaveUpdateWithWhereUniqueWithoutForUserInput {
-  where: LeaveWhereUniqueInput!
-  data: LeaveUpdateWithoutForUserDataInput!
-}
-
-input LeaveUpsertWithWhereUniqueWithoutForUserInput {
-  where: LeaveWhereUniqueInput!
-  update: LeaveUpdateWithoutForUserDataInput!
-  create: LeaveCreateWithoutForUserInput!
-}
-
-input LeaveWhereInput {
-  """Logical AND on all given filters."""
-  AND: [LeaveWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [LeaveWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [LeaveWhereInput!]
+  NOT: [LeaveScalarWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -275,6 +202,38 @@ input LeaveWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  status: LEAVE_STATUS
+
+  """All values that are not equal to given value."""
+  status_not: LEAVE_STATUS
+
+  """All values that are contained in given list."""
+  status_in: [LEAVE_STATUS!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [LEAVE_STATUS!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   lastDayOfWork: DateTime
 
   """All values that are not equal to given value."""
@@ -439,6 +398,452 @@ input LeaveWhereInput {
 
   """All values that are not contained in given list."""
   type_not_in: [LEAVE_TYPE!]
+  notes: String
+
+  """All values that are not equal to given value."""
+  notes_not: String
+
+  """All values that are contained in given list."""
+  notes_in: [String!]
+
+  """All values that are not contained in given list."""
+  notes_not_in: [String!]
+
+  """All values less than the given value."""
+  notes_lt: String
+
+  """All values less than or equal the given value."""
+  notes_lte: String
+
+  """All values greater than the given value."""
+  notes_gt: String
+
+  """All values greater than or equal the given value."""
+  notes_gte: String
+
+  """All values containing the given string."""
+  notes_contains: String
+
+  """All values not containing the given string."""
+  notes_not_contains: String
+
+  """All values starting with the given string."""
+  notes_starts_with: String
+
+  """All values not starting with the given string."""
+  notes_not_starts_with: String
+
+  """All values ending with the given string."""
+  notes_ends_with: String
+
+  """All values not ending with the given string."""
+  notes_not_ends_with: String
+}
+
+type LeaveSubscriptionPayload {
+  mutation: MutationType!
+  node: Leave
+  updatedFields: [String!]
+  previousValues: LeavePreviousValues
+}
+
+input LeaveSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LeaveSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LeaveSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LeaveSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: LeaveWhereInput
+}
+
+input LeaveUpdateInput {
+  status: LEAVE_STATUS
+  lastDayOfWork: DateTime
+  firstDayOfLeave: DateTime
+  lastDayOfLeave: DateTime
+  firstDayOfWork: DateTime
+  daysOfLeave: Int
+  publicHolidays: Int
+  totalLeaveDays: Int
+  type: LEAVE_TYPE
+  notes: String
+  forUser: UserUpdateOneWithoutAppliedLeaveInput
+}
+
+input LeaveUpdateManyDataInput {
+  status: LEAVE_STATUS
+  lastDayOfWork: DateTime
+  firstDayOfLeave: DateTime
+  lastDayOfLeave: DateTime
+  firstDayOfWork: DateTime
+  daysOfLeave: Int
+  publicHolidays: Int
+  totalLeaveDays: Int
+  type: LEAVE_TYPE
+  notes: String
+}
+
+input LeaveUpdateManyMutationInput {
+  status: LEAVE_STATUS
+  lastDayOfWork: DateTime
+  firstDayOfLeave: DateTime
+  lastDayOfLeave: DateTime
+  firstDayOfWork: DateTime
+  daysOfLeave: Int
+  publicHolidays: Int
+  totalLeaveDays: Int
+  type: LEAVE_TYPE
+  notes: String
+}
+
+input LeaveUpdateManyWithoutForUserInput {
+  create: [LeaveCreateWithoutForUserInput!]
+  connect: [LeaveWhereUniqueInput!]
+  disconnect: [LeaveWhereUniqueInput!]
+  delete: [LeaveWhereUniqueInput!]
+  update: [LeaveUpdateWithWhereUniqueWithoutForUserInput!]
+  updateMany: [LeaveUpdateManyWithWhereNestedInput!]
+  deleteMany: [LeaveScalarWhereInput!]
+  upsert: [LeaveUpsertWithWhereUniqueWithoutForUserInput!]
+}
+
+input LeaveUpdateManyWithWhereNestedInput {
+  where: LeaveScalarWhereInput!
+  data: LeaveUpdateManyDataInput!
+}
+
+input LeaveUpdateWithoutForUserDataInput {
+  status: LEAVE_STATUS
+  lastDayOfWork: DateTime
+  firstDayOfLeave: DateTime
+  lastDayOfLeave: DateTime
+  firstDayOfWork: DateTime
+  daysOfLeave: Int
+  publicHolidays: Int
+  totalLeaveDays: Int
+  type: LEAVE_TYPE
+  notes: String
+}
+
+input LeaveUpdateWithWhereUniqueWithoutForUserInput {
+  where: LeaveWhereUniqueInput!
+  data: LeaveUpdateWithoutForUserDataInput!
+}
+
+input LeaveUpsertWithWhereUniqueWithoutForUserInput {
+  where: LeaveWhereUniqueInput!
+  update: LeaveUpdateWithoutForUserDataInput!
+  create: LeaveCreateWithoutForUserInput!
+}
+
+input LeaveWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LeaveWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LeaveWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LeaveWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  status: LEAVE_STATUS
+
+  """All values that are not equal to given value."""
+  status_not: LEAVE_STATUS
+
+  """All values that are contained in given list."""
+  status_in: [LEAVE_STATUS!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [LEAVE_STATUS!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  lastDayOfWork: DateTime
+
+  """All values that are not equal to given value."""
+  lastDayOfWork_not: DateTime
+
+  """All values that are contained in given list."""
+  lastDayOfWork_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastDayOfWork_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastDayOfWork_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastDayOfWork_lte: DateTime
+
+  """All values greater than the given value."""
+  lastDayOfWork_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastDayOfWork_gte: DateTime
+  firstDayOfLeave: DateTime
+
+  """All values that are not equal to given value."""
+  firstDayOfLeave_not: DateTime
+
+  """All values that are contained in given list."""
+  firstDayOfLeave_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  firstDayOfLeave_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  firstDayOfLeave_lt: DateTime
+
+  """All values less than or equal the given value."""
+  firstDayOfLeave_lte: DateTime
+
+  """All values greater than the given value."""
+  firstDayOfLeave_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  firstDayOfLeave_gte: DateTime
+  lastDayOfLeave: DateTime
+
+  """All values that are not equal to given value."""
+  lastDayOfLeave_not: DateTime
+
+  """All values that are contained in given list."""
+  lastDayOfLeave_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastDayOfLeave_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastDayOfLeave_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastDayOfLeave_lte: DateTime
+
+  """All values greater than the given value."""
+  lastDayOfLeave_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastDayOfLeave_gte: DateTime
+  firstDayOfWork: DateTime
+
+  """All values that are not equal to given value."""
+  firstDayOfWork_not: DateTime
+
+  """All values that are contained in given list."""
+  firstDayOfWork_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  firstDayOfWork_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  firstDayOfWork_lt: DateTime
+
+  """All values less than or equal the given value."""
+  firstDayOfWork_lte: DateTime
+
+  """All values greater than the given value."""
+  firstDayOfWork_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  firstDayOfWork_gte: DateTime
+  daysOfLeave: Int
+
+  """All values that are not equal to given value."""
+  daysOfLeave_not: Int
+
+  """All values that are contained in given list."""
+  daysOfLeave_in: [Int!]
+
+  """All values that are not contained in given list."""
+  daysOfLeave_not_in: [Int!]
+
+  """All values less than the given value."""
+  daysOfLeave_lt: Int
+
+  """All values less than or equal the given value."""
+  daysOfLeave_lte: Int
+
+  """All values greater than the given value."""
+  daysOfLeave_gt: Int
+
+  """All values greater than or equal the given value."""
+  daysOfLeave_gte: Int
+  publicHolidays: Int
+
+  """All values that are not equal to given value."""
+  publicHolidays_not: Int
+
+  """All values that are contained in given list."""
+  publicHolidays_in: [Int!]
+
+  """All values that are not contained in given list."""
+  publicHolidays_not_in: [Int!]
+
+  """All values less than the given value."""
+  publicHolidays_lt: Int
+
+  """All values less than or equal the given value."""
+  publicHolidays_lte: Int
+
+  """All values greater than the given value."""
+  publicHolidays_gt: Int
+
+  """All values greater than or equal the given value."""
+  publicHolidays_gte: Int
+  totalLeaveDays: Int
+
+  """All values that are not equal to given value."""
+  totalLeaveDays_not: Int
+
+  """All values that are contained in given list."""
+  totalLeaveDays_in: [Int!]
+
+  """All values that are not contained in given list."""
+  totalLeaveDays_not_in: [Int!]
+
+  """All values less than the given value."""
+  totalLeaveDays_lt: Int
+
+  """All values less than or equal the given value."""
+  totalLeaveDays_lte: Int
+
+  """All values greater than the given value."""
+  totalLeaveDays_gt: Int
+
+  """All values greater than or equal the given value."""
+  totalLeaveDays_gte: Int
+  type: LEAVE_TYPE
+
+  """All values that are not equal to given value."""
+  type_not: LEAVE_TYPE
+
+  """All values that are contained in given list."""
+  type_in: [LEAVE_TYPE!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [LEAVE_TYPE!]
+  notes: String
+
+  """All values that are not equal to given value."""
+  notes_not: String
+
+  """All values that are contained in given list."""
+  notes_in: [String!]
+
+  """All values that are not contained in given list."""
+  notes_not_in: [String!]
+
+  """All values less than the given value."""
+  notes_lt: String
+
+  """All values less than or equal the given value."""
+  notes_lte: String
+
+  """All values greater than the given value."""
+  notes_gt: String
+
+  """All values greater than or equal the given value."""
+  notes_gte: String
+
+  """All values containing the given string."""
+  notes_contains: String
+
+  """All values not containing the given string."""
+  notes_not_contains: String
+
+  """All values starting with the given string."""
+  notes_starts_with: String
+
+  """All values not starting with the given string."""
+  notes_not_starts_with: String
+
+  """All values ending with the given string."""
+  notes_ends_with: String
+
+  """All values not ending with the given string."""
+  notes_not_ends_with: String
   forUser: UserWhereInput
 }
 
@@ -591,6 +996,141 @@ type StandupDetailPreviousValues {
   timeTaken: Int
 }
 
+input StandupDetailScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [StandupDetailScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [StandupDetailScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [StandupDetailScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  notes: String
+
+  """All values that are not equal to given value."""
+  notes_not: String
+
+  """All values that are contained in given list."""
+  notes_in: [String!]
+
+  """All values that are not contained in given list."""
+  notes_not_in: [String!]
+
+  """All values less than the given value."""
+  notes_lt: String
+
+  """All values less than or equal the given value."""
+  notes_lte: String
+
+  """All values greater than the given value."""
+  notes_gt: String
+
+  """All values greater than or equal the given value."""
+  notes_gte: String
+
+  """All values containing the given string."""
+  notes_contains: String
+
+  """All values not containing the given string."""
+  notes_not_contains: String
+
+  """All values starting with the given string."""
+  notes_starts_with: String
+
+  """All values not starting with the given string."""
+  notes_not_starts_with: String
+
+  """All values ending with the given string."""
+  notes_ends_with: String
+
+  """All values not ending with the given string."""
+  notes_not_ends_with: String
+  timeTaken: Int
+
+  """All values that are not equal to given value."""
+  timeTaken_not: Int
+
+  """All values that are contained in given list."""
+  timeTaken_in: [Int!]
+
+  """All values that are not contained in given list."""
+  timeTaken_not_in: [Int!]
+
+  """All values less than the given value."""
+  timeTaken_lt: Int
+
+  """All values less than or equal the given value."""
+  timeTaken_lte: Int
+
+  """All values greater than the given value."""
+  timeTaken_gt: Int
+
+  """All values greater than or equal the given value."""
+  timeTaken_gte: Int
+}
+
 type StandupDetailSubscriptionPayload {
   mutation: MutationType!
   node: StandupDetail
@@ -636,6 +1176,11 @@ input StandupDetailUpdateInput {
   forUser: UserUpdateOneWithoutStandupDetailsInput
 }
 
+input StandupDetailUpdateManyDataInput {
+  notes: String
+  timeTaken: Int
+}
+
 input StandupDetailUpdateManyMutationInput {
   notes: String
   timeTaken: Int
@@ -647,7 +1192,14 @@ input StandupDetailUpdateManyWithoutForUserInput {
   disconnect: [StandupDetailWhereUniqueInput!]
   delete: [StandupDetailWhereUniqueInput!]
   update: [StandupDetailUpdateWithWhereUniqueWithoutForUserInput!]
+  updateMany: [StandupDetailUpdateManyWithWhereNestedInput!]
+  deleteMany: [StandupDetailScalarWhereInput!]
   upsert: [StandupDetailUpsertWithWhereUniqueWithoutForUserInput!]
+}
+
+input StandupDetailUpdateManyWithWhereNestedInput {
+  where: StandupDetailScalarWhereInput!
+  data: StandupDetailUpdateManyDataInput!
 }
 
 input StandupDetailUpdateWithoutForUserDataInput {

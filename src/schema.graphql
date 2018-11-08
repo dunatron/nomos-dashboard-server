@@ -12,6 +12,7 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   changeUserRole(id: ID!, role: ROLE!): User!
+  acceptLeave(id: ID!): Leave!
   createStandupDetail(userId: ID!, timeTaken: Int, notes: String): StandupDetail
   createLeave(
     userId: ID!

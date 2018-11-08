@@ -32,7 +32,9 @@ type StandupDetail {
 
 type Leave {
   id: ID! @unique
+  status: LEAVE_STATUS! @default(value: "PENDING")
   forUser: User @relation(name: "UserLeaveDetails")
+  createdAt: DateTime!
   lastDayOfWork: DateTime!
   firstDayOfLeave: DateTime!
   lastDayOfLeave: DateTime!
@@ -41,6 +43,13 @@ type Leave {
   publicHolidays: Int!
   totalLeaveDays: Int!
   type: LEAVE_TYPE! @default(value: "SICK_LEAVE")
+  notes: String
+}
+
+enum LEAVE_STATUS {
+  ACCEPTED
+  PENDING
+  DENIED
 }
 
 enum LEAVE_TYPE {
