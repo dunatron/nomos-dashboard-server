@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "graphql-tools": "^4.0.3",
     "graphql-yoga": "^1.16.7",
     "moment": "^2.22.2",
     "nodemailer": "^4.6.8",
