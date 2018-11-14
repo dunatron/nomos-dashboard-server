@@ -1,4 +1,4 @@
-# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveOrderByInput from "./generated/prisma.graphql"
+# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput from "./generated/prisma.graphql"
 
 type Query {
   info: String!

@@ -172,6 +172,47 @@ query {
 }
 ```
 
+Query the leave feed
+
+```
+query LeaveFeedQuery(
+  $filter: String
+  $first: Int
+  $skip: Int
+  $betweenFilter:[DateTime!]
+  $orderBy:LeaveOrderByInput
+) {
+  leaveFeed(
+    betweenFilter: $betweenFilter,
+    filter: $filter,
+    first: $first,
+    skip: $skip,
+    orderBy:$orderBy
+  ) {
+    count
+    leaves {
+      id
+      status
+      notes
+      createdAt
+      lastDayOfWork
+      firstDayOfLeave
+      lastDayOfLeave
+      firstDayOfWork
+      daysOfLeave
+      publicHolidays
+      totalLeaveDays
+      forUser {
+        id
+        name
+      }
+    }
+  }
+}
+```
+
+![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/query_leave_feed.png)
+
 Change user role in the DB
 
 ```

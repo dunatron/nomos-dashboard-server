@@ -1,57 +1,16 @@
 const { APP_SECRET, getUserId } = require("../utils")
 
 async function leaveFeed(parent, args, context, info) {
-  // const where = args.filter
-  //   ? {
-  //       OR: [
-  //         { notes_contains: args.filter },
-  //         //https://www.prisma.io/docs/prisma-client/basic-data-access/reading-data-JAVASCRIPT-rsc2/#relational-filters-for-lists
-  //       ],
-  //       AND: [
-  //         {
-  //           lastDayOfWork_in: args.betweenFilter,
-  //         },
-  //       ],
-  //     }
-  //   : {}
-
-  // const where = args.filter
-  //   ? {
-  //       AND: [
-  //         {
-  //           OR: [
-  //             {
-  //               notes_contains: args.filter,
-  //             },
-  //           ],
-  //         },
-  //         args.betweenFilter
-  //           ? {
-  //               AND: [
-  //                 {
-  //                   // createdAt_gt: "2017",
-  //                   // lastDayOfWork_in: args.betweenFilter,
-  //                   lastDayOfWork_in: "2017",
-  //                 },
-  //               ],
-  //             }
-  //           : {},
-  //       ],
-  //     }
-  //   : {}
-
-  // const where = args.betweenFilter
-  //   ? {
-  //       AND: [
-  //         {
-  //           lastDayOfWork_in: args.betweenFilter,
-  //           lastDayOfWork: args.filter
-  //         },
-  //       ],
-  //     }
-  //   : {}
-
-  console.log("Where filter looks like => ", where)
+  const where = args.betweenFilter
+    ? {
+        AND: [
+          {
+            firstDayOfLeave_gte: args.betweenFilter[0],
+            lastDayOfLeave_lte: args.betweenFilter[1],
+          },
+        ],
+      }
+    : {}
 
   // 1.
   const queriedLeaves = await context.db.query.leaves(
