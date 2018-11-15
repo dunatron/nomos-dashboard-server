@@ -432,3 +432,11 @@ The above mutation would return the following response
     }
   }
 ```
+
+### create Question mutation
+
+![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/create_question_mutation.png)
+
+### create question mutation query variables
+
+![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/create_question_mutation_variables.png)
