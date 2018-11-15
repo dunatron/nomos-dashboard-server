@@ -77,60 +77,34 @@ function acceptLeave(parent, args, context, info) {
   )
 }
 
-// function createStandupDetail(parent, args, context, info) {
-//   return context.db.mutation.createStandupDetail(
-//     {
-//       data: {
-//         forUser: {
-//           connect: {
-//             id: args.userId,
-//           },
-//         },
-//         // ...args.standUpDetails,
-//         timeTaken: args.timeTake,
-//         notes: args.notes,
-//       },
-//     },
-//     info
-//   )
-// }
+async function createQuestion(parent, args, context, info) {
+  console.group(createQuestion)
+  console.log("parent => ", parent)
+  console.log("args => ", args)
+  console.log("context => ", context)
+  console.groupEnd()
+  const question = await context.db.mutation.createQuestion(
+    {
+      data: { ...args.data },
+    },
+    info
+  )
 
-// async function createLeave(parent, args, context, info) {
-//   var mailOptions = {
-//     from: "heath.dunlop.hd@gmail.com",
-//     to: "heath.dunlop@nomosone.com",
-//     subject: `${args.userId} is requesting leave`,
-//     text: `Total Leave days: ${args.daysOfLeave +
-//       args.publicHolidays} last day of work: ${args.lastDayOfWork}`,
-//   }
-//   await transporter.sendMail(mailOptions, function(error, info) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       console.log("Email sent: " + info.response)
-//     }
-//   })
-//   return context.db.mutation.createLeave(
-//     {
-//       data: {
-//         type: args.type,
-//         forUser: {
-//           connect: {
-//             id: args.userId,
-//           },
-//         },
-//         lastDayOfWork: args.lastDayOfWork,
-//         firstDayOfLeave: args.firstDayOfLeave,
-//         lastDayOfLeave: args.lastDayOfLeave,
-//         firstDayOfWork: args.firstDayOfWork,
-//         daysOfLeave: args.daysOfLeave,
-//         publicHolidays: args.publicHolidays,
-//         totalLeaveDays: args.daysOfLeave + args.publicHolidays,
-//       },
-//     },
-//     info
-//   )
-// }
+  console.log("Question being retiurnder => ", question)
+
+  return question
+
+  // return context.db.mutation.createQuestion(
+  //   {
+  //     data: {
+  //       name: args.data.name,
+  //       answers:
+  //     },
+  //   },
+  //   info
+  // )
+}
+// createQuestion
 
 module.exports = {
   acceptLeave,
@@ -139,4 +113,5 @@ module.exports = {
   changeUserRole,
   createStandupDetail,
   createLeave,
+  createQuestion,
 }

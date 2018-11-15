@@ -1,4 +1,4 @@
-# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput from "./generated/prisma.graphql"
+# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput, QuestionCreateInput from "./generated/prisma.graphql"
 
 type Query {
   info: String!
@@ -43,6 +43,7 @@ type Mutation {
     publicHolidays: Int!
     type: LEAVE_TYPE
   ): Leave
+  createQuestion(data: QuestionCreateInput): Question
 }
 
 type LeaveFeed {

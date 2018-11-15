@@ -67,3 +67,52 @@ enum LEAVE_TYPE {
   CIVIL_DEFENCE_EMERGENCY
   MILITARY_SERVICE
 }
+# https://itnext.io/graphql-interfaces-and-union-types-with-prisma-and-yoga-7224f9e1d9ad
+type Question {
+  id: ID! @unique
+  name: String! @unique
+  answers: [Answer!]! @relation(name: "QuestionAnswers", onDelete: CASCADE)
+  tags: [Tag!]! @relation(name: "QuestionTags", onDelete: SET_NULL)
+  notes: [QuestionNote!]! @relation(name: "QuestionNotes", onDelete: CASCADE)
+  links: [QuestionLink!]! @relation(name: "QuestionLinks", onDelete: SET_NULL)
+}
+
+type Answer {
+  id: ID! @unique
+  question: Question @relation(name: "QuestionAnswers")
+  response: String!
+  notes: [AnswerNote!]! @relation(name: "AnswerNotes", onDelete: CASCADE)
+  links: [AnswerLink!]! @relation(name: "AnswerLinks", onDelete: SET_NULL)
+}
+
+type Tag {
+  id: ID! @unique
+  name: String!
+  questions: [Question!]! @relation(name: "QuestionTags")
+}
+
+type QuestionLink {
+  id: ID! @unique
+  name: String! @unique
+  url: String!
+  questions: [Question!]! @relation(name: "QuestionLinks")
+}
+
+type QuestionNote {
+  id: ID! @unique
+  content: String!
+  question: Question @relation(name: "QuestionNotes")
+}
+
+type AnswerLink {
+  id: ID! @unique
+  name: String! @unique
+  url: String!
+  answers: [Answer!]! @relation(name: "AnswerLinks")
+}
+
+type AnswerNote {
+  id: ID! @unique
+  content: String!
+  answer: Answer @relation(name: "AnswerNotes")
+}
