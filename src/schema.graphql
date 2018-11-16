@@ -1,4 +1,4 @@
-# import User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput, QuestionCreateInput from "./generated/prisma.graphql"
+# import Question, Answer, Tag, QuestionLink, QuestionNote, AnswerLink, AnswerNote, User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput, QuestionCreateInput from "./generated/prisma.graphql"
 
 type Query {
   info: String!
@@ -6,18 +6,6 @@ type Query {
   getUser: User!
   getStandupDetails: [StandupDetail!]!
   getAllLeave: [Leave!]!
-  # leaveFeed(
-  #   filter: String
-  #   skip: Int
-  #   first: Int
-  #   orderBy: LeaveOrderByInput
-  # ): [LeaveFeed!]!
-  # leaveFeed(
-  #   filter: String
-  #   skip: Int
-  #   first: Int
-  #   orderBy: LeaveOrderByInput
-  # ): [Leave!]!
   leaveFeed(
     filter: String
     betweenFilter: [DateTime!]
@@ -25,6 +13,7 @@ type Query {
     first: Int
     orderBy: LeaveOrderByInput
   ): LeaveFeed!
+  searchQuestions(search: String): [Question!]!
 }
 
 type Mutation {

@@ -36,11 +36,14 @@ async function leaveFeed(parent, args, context, info) {
     count: leavesConnection.aggregate.count,
     leaveIds: queriedLeaves.map(leave => leave.id),
   }
+}
 
-  // return context.db.query.leaves(
-  //   { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
-  //   info
-  // )
+async function searchQuestions(parent, args, context, info) {
+  const searchString = args.search
+  return context.db.query.questions(
+    { where: { name_contains: searchString } },
+    info
+  )
 }
 
 function getAllLeave(root, args, context, info) {
@@ -71,4 +74,5 @@ module.exports = {
   getUser,
   allUsers,
   info,
+  searchQuestions,
 }

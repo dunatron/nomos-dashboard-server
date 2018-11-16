@@ -440,3 +440,17 @@ The above mutation would return the following response
 ### create question mutation query variables
 
 ![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/create_question_mutation_variables.png)
+
+#### Searching Questions
+
+```
+query searchQuestions($search:String) {
+  questions(where:{name_contains: $search}) {
+    id
+    name
+    links {
+      id
+    }
+  }
+}
+```
