@@ -46,6 +46,26 @@ async function searchQuestions(parent, args, context, info) {
   )
 }
 
+async function questionsFullTextSearch(parent, args, context, info) {
+  // user supplied search string
+  const searchString = args.search
+  // func to filter our list by full text search on the name field
+  function find(items, text) {
+    text = text.split(" ")
+    return items.filter(function(item) {
+      return text.every(function(el) {
+        return item.name.indexOf(el) > -1
+      })
+    })
+  }
+  // not ideal but get all of the questions returned to the server
+  const allItems = await context.db.query.questions({}, info)
+  // filter by our search function
+  const searchedItems = find(allItems, searchString)
+  // send filtered list to the client
+  return searchedItems
+}
+
 function getAllLeave(root, args, context, info) {
   return context.db.query.leaves({}, info)
 }
@@ -75,4 +95,5 @@ module.exports = {
   allUsers,
   info,
   searchQuestions,
+  questionsFullTextSearch,
 }
