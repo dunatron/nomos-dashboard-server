@@ -48,13 +48,13 @@ async function searchQuestions(parent, args, context, info) {
 
 async function questionsFullTextSearch(parent, args, context, info) {
   // user supplied search string
-  const searchString = args.search
+  const searchString = args.search.toLowerCase()
   // func to filter our list by full text search on the name field
   function find(items, text) {
     text = text.split(" ")
     return items.filter(function(item) {
       return text.every(function(el) {
-        return item.name.indexOf(el) > -1
+        return item.name.toLowerCase().indexOf(el) > -1
       })
     })
   }
