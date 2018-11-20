@@ -5,6 +5,7 @@ const Mutation = require("./resolvers/Mutation")
 const AuthPayload = require("./resolvers/AuthPayload")
 const Subscription = require("./resolvers/Subscription")
 const LeaveFeed = require("./resolvers/LeaveFeed")
+const QuestionFeed = require("./resolvers/feeds/QuestionFeed")
 
 const resolvers = {
   Query,
@@ -12,6 +13,7 @@ const resolvers = {
   AuthPayload,
   Subscription,
   LeaveFeed,
+  QuestionFeed,
 }
 
 // 3

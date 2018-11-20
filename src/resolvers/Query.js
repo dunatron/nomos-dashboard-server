@@ -1,5 +1,42 @@
 const { APP_SECRET, getUserId } = require("../utils")
 
+async function questionFeed(parent, args, context, info) {
+  const where = args.filter
+    ? {
+        AND: [
+          {
+            name_contains: args.filter[0],
+          },
+        ],
+      }
+    : {}
+
+  // 1.
+  const queriedQuestions = await context.db.query.questions(
+    { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+    `{ id }`
+  )
+
+  // 2.
+  const countSelectionSet = `
+    {
+      aggregate {
+        count
+      }
+    }
+  `
+  const questionsConnection = await context.db.query.leavesConnection(
+    {},
+    countSelectionSet
+  )
+
+  // 3
+  return {
+    count: questionsConnection.aggregate.count,
+    questionIds: queriedQuestions.map(question => question.id),
+  }
+}
+
 async function leaveFeed(parent, args, context, info) {
   const where = args.betweenFilter
     ? {
@@ -74,6 +111,10 @@ function getStandupDetails(root, args, context, info) {
   return context.db.query.standupDetails({}, info)
 }
 
+function allTags(root, args, context, info) {
+  return context.db.query.tags({}, info)
+}
+
 function allUsers(root, args, context, info) {
   return context.db.query.users({}, info)
 }
@@ -90,9 +131,11 @@ function info(root, args, context, info) {
 module.exports = {
   getAllLeave,
   leaveFeed,
+  questionFeed,
   getStandupDetails,
   getUser,
   allUsers,
+  allTags,
   info,
   searchQuestions,
   questionsFullTextSearch,

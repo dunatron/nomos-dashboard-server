@@ -454,3 +454,98 @@ query searchQuestions($search:String) {
   }
 }
 ```
+
+#### Question Feed
+
+```
+query questionFeed(
+  $filter: String
+  $skip: Int
+  $first: Int
+  $orderBy: QuestionOrderByInput
+) {
+  questionFeed(filter: $filter, skip: $skip, first: $first, orderBy: $orderBy) {
+    questions {
+      id
+      name
+      answers {
+        id
+        response
+      }
+      links {
+        id
+        name
+        url
+      }
+      notes {
+        id
+        content
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+}
+
+```
+
+Query variables for questionFeed
+
+```
+{
+  "filter": "",
+  "skip":0,
+  "first":10,
+  "orderBy": "name_ASC"
+}
+```
+
+### Update Question
+
+```
+mutation updateQuestion($id:ID!, $data:QuestionUpdateInput!){
+  updateQuestion(id:$id, data:$data) {
+    id
+    name
+    answers {
+      id
+      response
+    }
+    notes {
+      id
+      content
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}
+```
+
+#### The query variable for updateQuestion
+
+```
+{
+  "id":"cjojb93fz40v30a64euqj93w1",
+  "data": {
+    "answers": {
+      "update": [
+        {"where":
+          {
+            "id": "cjop5yokerjx50a6413b540m2" },
+          	"data": {
+              "response": "here is an update to an answer"
+            }
+        }
+      ],
+      "create": [
+        {"response": "Here is a new answer" }
+      ]
+    }
+  }
+}
+```

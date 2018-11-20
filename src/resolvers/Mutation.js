@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken")
 const { APP_SECRET, getUserId } = require("../utils")
 const { createStandupDetail } = require("./mutations/createStandupDetail")
 const { createLeave } = require("./mutations/createLeave")
+const { createTag } = require("./mutations/createTag")
+const { updateQuestion } = require("./mutations/updateQuestion")
 
 async function signup(parent, args, context, info) {
   if (args.email.length < 3) {
@@ -114,4 +116,6 @@ module.exports = {
   createStandupDetail,
   createLeave,
   createQuestion,
+  createTag,
+  updateQuestion,
 }
