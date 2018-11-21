@@ -1,4 +1,4 @@
-# import Question, Answer, Tag, QuestionLink, QuestionNote, AnswerLink, AnswerNote, User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput, QuestionCreateInput, QuestionUpdateInput QuestionOrderByInput from "./generated/prisma.graphql"
+# import Question, Answer, Tag, QuestionLink, QuestionNote, AnswerLink, AnswerNote, User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput, QuestionCreateInput, QuestionUpdateInput, QuestionOrderByInput, TagSubscriptionPayload from "./generated/prisma.graphql"
 
 type Query {
   info: String!
@@ -70,4 +70,5 @@ type User {
 
 type Subscription {
   newLeave: LeaveSubscriptionPayload
+  newTag: TagSubscriptionPayload
 }

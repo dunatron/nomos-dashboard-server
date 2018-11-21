@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/nomos-dashboard-db/dev
-# timestamp: Fri Nov 16 2018 11:26:51 GMT+1300 (NZDT)
+# timestamp: Wed Nov 21 2018 11:14:44 GMT+1300 (NZDT)
 
 type AggregateAnswer {
   count: Int!
@@ -4143,6 +4143,7 @@ input TagWhereInput {
 
 input TagWhereUniqueInput {
   id: ID
+  name: String
 }
 
 type User implements Node {
