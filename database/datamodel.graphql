@@ -93,7 +93,7 @@ type Tag {
 
 type QuestionLink {
   id: ID! @unique
-  name: String! @unique
+  name: String!
   url: String!
   questions: [Question!]! @relation(name: "QuestionLinks")
 }
@@ -106,7 +106,7 @@ type QuestionNote {
 
 type AnswerLink {
   id: ID! @unique
-  name: String! @unique
+  name: String!
   url: String!
   answers: [Answer!]! @relation(name: "AnswerLinks")
 }

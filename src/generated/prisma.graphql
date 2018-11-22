@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/heath-dunlop-37e897/nomos-dashboard-db/dev
-# timestamp: Wed Nov 21 2018 11:14:44 GMT+1300 (NZDT)
+# timestamp: Thu Nov 22 2018 16:42:02 GMT+1300 (NZDT)
 
 type AggregateAnswer {
   count: Int!
@@ -523,7 +523,6 @@ input AnswerLinkWhereInput {
 
 input AnswerLinkWhereUniqueInput {
   id: ID
-  name: String
 }
 
 type AnswerNote implements Node {
@@ -2667,7 +2666,6 @@ input QuestionLinkWhereInput {
 
 input QuestionLinkWhereUniqueInput {
   id: ID
-  name: String
 }
 
 type QuestionNote implements Node {
