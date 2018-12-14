@@ -116,3 +116,24 @@ type AnswerNote {
   content: String!
   answer: Answer @relation(name: "AnswerNotes")
 }
+
+# Code Keeper Model
+type CodeSnippet {
+  id: ID! @unique
+  createdAt: DateTime!
+  name: String! @unique
+  content: String!
+  note: String
+  tags: [CodeTag!]! @relation(name: "CodeTags", onDelete: SET_NULL)
+  links: [CodeLink!]! @relation(name: "CodeLinks", onDelete: CASCADE)
+}
+
+type CodeTag {
+  name: String! @unique
+}
+
+type CodeLink {
+  id: ID! @unique
+  name: String
+  url: String
+}

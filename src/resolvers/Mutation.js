@@ -80,33 +80,24 @@ function acceptLeave(parent, args, context, info) {
 }
 
 async function createQuestion(parent, args, context, info) {
-  console.group(createQuestion)
-  console.log("parent => ", parent)
-  console.log("args => ", args)
-  console.log("context => ", context)
-  console.groupEnd()
   const question = await context.db.mutation.createQuestion(
     {
       data: { ...args.data },
     },
     info
   )
-
-  console.log("Question being retiurnder => ", question)
-
   return question
-
-  // return context.db.mutation.createQuestion(
-  //   {
-  //     data: {
-  //       name: args.data.name,
-  //       answers:
-  //     },
-  //   },
-  //   info
-  // )
 }
-// createQuestion
+
+async function createCode(parent, args, context, info) {
+  const code = await context.db.mutation.createCodeSnippet(
+    {
+      data: { ...args.data },
+    },
+    info
+  )
+  return code
+}
 
 module.exports = {
   acceptLeave,
@@ -118,4 +109,5 @@ module.exports = {
   createQuestion,
   createTag,
   updateQuestion,
+  createCode,
 }

@@ -1,4 +1,4 @@
-# import Question, Answer, Tag, QuestionLink, QuestionNote, AnswerLink, AnswerNote, User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput, QuestionCreateInput, QuestionUpdateInput, QuestionOrderByInput, TagSubscriptionPayload from "./generated/prisma.graphql"
+# import Question, Answer, Tag, QuestionLink, QuestionNote, AnswerLink, AnswerNote, User, ROLE, StandupDetails, Leave, LEAVE_TYPE, LeaveSubscriptionPayload, LeaveScalarWhereInput LeaveOrderByInput, QuestionCreateInput, QuestionUpdateInput, QuestionOrderByInput, TagSubscriptionPayload, CodeSnippetCreateInput from "./generated/prisma.graphql"
 
 type Query {
   info: String!
@@ -44,6 +44,7 @@ type Mutation {
   updateQuestion(id: ID!, data: QuestionUpdateInput!): Question
 
   createTag(name: String!): Tag
+  createCode(data: CodeSnippetCreateInput): CodeSnippet
 }
 
 type LeaveFeed {
