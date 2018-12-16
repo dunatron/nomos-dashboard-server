@@ -5,6 +5,11 @@ const { createStandupDetail } = require("./mutations/createStandupDetail")
 const { createLeave } = require("./mutations/createLeave")
 const { createTag } = require("./mutations/createTag")
 const { updateQuestion } = require("./mutations/updateQuestion")
+const {
+  createCode,
+  createCodeTag,
+  createCodeLink,
+} = require("./codekeeper/mutations.js")
 
 async function signup(parent, args, context, info) {
   if (args.email.length < 3) {
@@ -89,16 +94,6 @@ async function createQuestion(parent, args, context, info) {
   return question
 }
 
-async function createCode(parent, args, context, info) {
-  const code = await context.db.mutation.createCodeSnippet(
-    {
-      data: { ...args.data },
-    },
-    info
-  )
-  return code
-}
-
 module.exports = {
   acceptLeave,
   signup,
@@ -110,4 +105,6 @@ module.exports = {
   createTag,
   updateQuestion,
   createCode,
+  createCodeTag,
+  createCodeLink,
 }

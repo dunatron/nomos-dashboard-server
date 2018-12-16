@@ -1,4 +1,5 @@
 const { APP_SECRET, getUserId } = require("../utils")
+const { allCodeTags, codeSearch } = require("./codekeeper/queries")
 
 async function questionFeed(parent, args, context, info) {
   const where = args.filter
@@ -139,4 +140,6 @@ module.exports = {
   info,
   searchQuestions,
   questionsFullTextSearch,
+  allCodeTags,
+  codeSearch,
 }

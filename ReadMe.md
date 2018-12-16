@@ -6,7 +6,7 @@
 
 - the below mutation will create new stand up details for a user. Now this is stepping through the api that was scaffolded by prisma. These mutations and queries will not be queryable by the client API we expose. instead you need to create something based on this api I would imagine.
 
-```
+```JS
 mutation{
   createStandupDetails(
     data:{
@@ -34,7 +34,7 @@ mutation{
 
 In `src/resolvers/mutation.js` we will create our new mutation to expose to the client. Note make sure to check the bottom of the file to add our new mutation function
 
-```
+```JS
 function createStandupDetails(parent, args, context, info) {
   return context.db.mutation.createStandupDetails(
     {
@@ -56,7 +56,7 @@ function createStandupDetails(parent, args, context, info) {
 
 You will also need to go into the `src/schema.graphql` file and add the following
 
-```
+```JS
   createStandupDetails(
     userId: ID!
     timeTaken: Int
@@ -67,7 +67,7 @@ You will also need to go into the `src/schema.graphql` file and add the followin
 Example of the above DB Mutation created as a client Mutation.
 You could use this in your client to create a mutation
 
-```
+```JS
 mutation {
   createStandupDetails(userId:"cjnxy25r6e8du0995uhu2mx7w",
     timeTaken:555, notes:"Here are some more notes") {
@@ -81,7 +81,7 @@ mutation {
 In reality your mutation will look more like this so you can dynamically parse in the variables
 ![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/standupDetailsMutation.png)
 
-```
+```JS
 mutation deleteSection($sectionId:ID!){
   deleteSection(where: {id: $sectionId}) {
     id
@@ -91,7 +91,7 @@ mutation deleteSection($sectionId:ID!){
 
 To get all the stand up details
 
-```
+```JS
 query {
   getStandupDetails {
     id
@@ -109,7 +109,7 @@ The following query is an example on how to create a db mutation for creating le
 
 ![alt text](https://github.com/dunatron/nomos-dashboard-server/blob/master/documentation/img/db_leave_mutation_example.png)
 
-```
+```JS
 mutation createLeave(
   $lastDayOfWork: DateTime!
   $firstDayOfLeave: DateTime!
@@ -139,7 +139,7 @@ mutation createLeave(
 
 Query variables for above query
 
-```
+```JS
 {
   "lastDayOfWork": "2015-03-25T12:00:00-06:30",
   "firstDayOfLeave":"2015-03-25T12:00:00-06:30",
@@ -154,7 +154,7 @@ Query variables for above query
 
 Get all of the Leave in the system
 
-```
+```JS
 query {
   getAllLeave {
     lastDayOfWork
@@ -174,7 +174,7 @@ query {
 
 Query the leave feed
 
-```
+```JS
 query LeaveFeedQuery(
   $filter: String
   $first: Int
@@ -215,7 +215,7 @@ query LeaveFeedQuery(
 
 Change user role in the DB
 
-```
+```JS
 mutation acceptLeave($id:ID!) {
   updateLeave(where:{id:$id} data:{status:ACCEPTED}) {
     id
@@ -226,7 +226,7 @@ mutation acceptLeave($id:ID!) {
 
 CLient Query
 
-```
+```JS
 mutation acceptLeave($id:ID!) {
   acceptLeave(id:$id) {
     id
@@ -237,7 +237,7 @@ mutation acceptLeave($id:ID!) {
 
 function created on the craphql server to handle the above client query
 
-```
+```JS
 function acceptLeave(parent, args, context, info) {
   return context.db.mutation.updateLeave(
     {
@@ -255,7 +255,7 @@ function acceptLeave(parent, args, context, info) {
 
 ### DataModel
 
-```
+```JS
 type Question {
   id: ID! @unique
   name: String! @unique
@@ -308,7 +308,7 @@ type AnswerNote {
 
 Create a new Question with new answers
 
-```
+```JS
 mutation {
   createQuestion(data:{name: "Question 10." answers:{create:[
     {response:"answer 1"},
@@ -327,7 +327,7 @@ This mutation creates a new question with 3 answers.
 Two of these answers are new and created on the fly.
 One of these has already been created and we are just associating it with the question. Note: our business logic of having an answer associted with 1 question only still remains true. It just means we can create questions withought knowing what question to attach to yet. or being lazy.
 
-```
+```JS
 mutation {
   createQuestion(data:{name: "Question 12." answers:{create:[
     {response:"answer 1"},
@@ -347,7 +347,7 @@ mutation {
 
 The actual mutation a client(front-end) can make
 
-```
+```JS
 mutation createQuestion {
   createQuestion(data:{
     name:"Question 1005"
@@ -391,7 +391,7 @@ mutation createQuestion {
 
 The above mutation would return the following response
 
-```
+```JS
 {
   "data": {
     "createQuestion": {
@@ -443,7 +443,7 @@ The above mutation would return the following response
 
 #### Searching Questions
 
-```
+```JS
 query searchQuestions($search:String) {
   questions(where:{name_contains: $search}) {
     id
@@ -457,7 +457,7 @@ query searchQuestions($search:String) {
 
 #### Question Feed
 
-```
+```JS
 query questionFeed(
   $filter: String
   $skip: Int
@@ -493,7 +493,7 @@ query questionFeed(
 
 Query variables for questionFeed
 
-```
+```JS
 {
   "filter": "",
   "skip":0,
@@ -504,7 +504,7 @@ Query variables for questionFeed
 
 ### Update Question
 
-```
+```JS
 mutation updateQuestion($id:ID!, $data:QuestionUpdateInput!){
   updateQuestion(id:$id, data:$data) {
     id
@@ -528,7 +528,7 @@ mutation updateQuestion($id:ID!, $data:QuestionUpdateInput!){
 
 #### The query variable for updateQuestion
 
-```
+```JS
 {
   "id":"cjojb93fz40v30a64euqj93w1",
   "data": {
@@ -547,5 +547,162 @@ mutation updateQuestion($id:ID!, $data:QuestionUpdateInput!){
       ]
     }
   }
+}
+```
+
+## Code Keeper
+
+#### Queries
+
+###### searchCode
+
+```JS
+query searchCode($search:String!) {
+  codeSearch(search:$search) {
+    id
+    name
+    content
+    tags {
+      name
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}
+// variables
+{
+  "search": "code snippet 2"
+}
+```
+
+#### Mutations
+
+###### createCodeTag
+
+```JS
+mutation createCodeTag($name: String!) {
+  createCodeTag(name:$name) {
+    name
+  }
+}
+```
+
+###### createCode
+
+```JS
+mutation createCode($data: CodeSnippetCreateInput) {
+  createCode(data: $data) {
+    name
+    content
+    note
+    tags {
+      name
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}
+// The query variables
+{
+  "data": {
+    "name": "Here is an example name again again",
+    "content": "The content for this code snippet",
+    "tags": {
+      "connect": [
+        {
+          "name": "javascript"
+        },
+         {
+          "name": "Php"
+        }
+      ]
+    },
+    "links": {
+      "create": [
+        {"name": "I am link 1", "url": "https://google.com" }
+      ]
+    }
+  }
+}
+```
+
+###### updateCodeSnippet
+
+```JS
+mutation updateCode($codeId:ID! $data: CodeSnippetUpdateInput!) {
+  updateCodeSnippet(where:{id: $codeId} data: $data) {
+    id
+   	name
+    content
+    note
+    tags {
+      name
+    }
+    links {
+      id
+      name
+      url
+    }
+  }
+}
+// The variables
+{
+  "codeId": "cjprf9yi3b3ji0a84heo6j7cz",
+  "data":{
+    "name": "I am the code name updated",
+    "content": "Iam a living Pion, ear near zion",
+    "note": "I am an updated note, so please dear god, not them",
+    "tags": {
+      "disconnect": [
+        {"name": "javascript"}
+      ],
+      "connect": [
+        { "name": "Php" }
+      ]
+    },
+    "links": {
+      "delete": [
+       {"id": "cjprfirfhmfqb0a42e25k0nq5"}
+      ],
+      "create": [
+        { "name": "I am a new link name", "url": "https://bity.bin" }
+      ]
+    }
+  }
+}
+```
+
+###### deleteCodeSnippet
+
+```JS
+mutation deleteCode($id:ID!) {
+  deleteCodeSnippet(where: {id:$id}) {
+    id
+    name
+  }
+}
+// variables
+{
+  "id":"cjprfpg0nmgn20a42gjtwjat4"
+}
+```
+
+###### deleteCodeTag
+
+```JS
+mutation deleteCodeTag($name:String!) {
+  deleteCodeTag(where: {name:$name}) {
+    name
+  }
+}
+// variables
+{
+  "name":"javascript"
 }
 ```
