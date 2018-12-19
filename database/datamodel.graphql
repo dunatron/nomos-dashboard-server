@@ -137,3 +137,55 @@ type CodeLink {
   name: String
   url: String
 }
+
+#Financial System
+# type Organisation {
+#   id: ID! @unique
+#   name: String!
+#   users: [User!]! @relation(name: "OrgUsers", onDelete: SET_NULL)
+#   agreements: [Agreement!]! @relation(name: "OrgAgreements", onDelete: CASCADE)
+# }
+
+# type Agreement {
+#   id: ID! @unique
+#   name: String!
+#   events: [Event!]! @relation(name: "AgreementEvents", onDelete: CASCADE)
+#   currency: CURRENCY_CODES! @default(value: "NZD")
+# }
+
+# type Event {
+#   id: ID! @unique
+#   date: DateTime!
+#   createdAt: DateTime!
+#   type: EVENT_TYPE! @default(value: "COMMENCEMENT")
+#   subType: EVENT_SUB_TYPE! @default(value: "COMMENCEMENT")
+# }
+
+# enum EVENT_TYPE {
+#   COMMENCEMENT
+#   TERM
+#   RENT
+#   VARIATION
+#   EXPIRY
+#   WOF
+#   MAINTENANCE
+#   MILESTONE
+#   REMINDER
+#   CUSTOM
+# }
+
+# enum EVENT_SUB_TYPE {
+#   COMMENCEMENT
+#   AGREEMENT_TO_LEASE
+#   INITIAL_TERM
+#   RENEWAL_TERM
+#   OPTION
+#   BREAK_CLAUSE
+#   MARKET_RENT_REVIEW
+#   CPI_RENT_REVIEW
+#   FIXED_RENT_REVIEW
+#   CONDITIONAL_RENT_REVIEW
+#   EXPIRY
+#   SURRENDER
+#   TRANSFER
+# }
